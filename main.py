@@ -43,7 +43,6 @@ class BookScraper:
 
     def extract_author_names(self, soup):
         author_elements = soup.find_all('span', class_='ContributorLink__name')
-        #print(author_elements)
         author_list = [author.text for author in author_elements]
         return list(set(author_list))
 
@@ -72,7 +71,6 @@ class BookScraper:
         for url in self.url_list:
             book = self.scrape_book(url)
             books.append(book)
-            print(book['title'])
 
         with open(output_file, 'w') as json_file:
             json.dump(books, json_file, indent=2)
@@ -80,8 +78,7 @@ class BookScraper:
 
 if __name__ == "__main__":
     file_path = 'example_booklist.txt'
-    output_file = 'book_data_missing.json'
-
+    output_file = 'data/example_book_data.json'
     book_scraper = BookScraper()
     book_scraper.read_book_ids(file_path)
     book_scraper.get_all_books(output_file)

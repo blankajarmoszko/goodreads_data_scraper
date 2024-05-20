@@ -4,20 +4,34 @@ import json
 import re
 
 class ReviewScraper:
+    """
+    ReviewScraper class takes in a base url. The overall methods in this class return reviews for each of the given books.
+    """
     def __init__(self, base_url):
         self.base_url = base_url
 
-    def extract_reviewer_info(self, soup):
+    def extract_reviewer_info(self, review_card):
+        """
+        This function takes in a html of a review card and extracts relevant information about the reviewer.
+        It takes into account both regular reviewers and authors who have a different layout of their review cards.
+        :param review_card: html of a singular review card
+        :return:
+        - 'reviewer_name': name of the reviewer as appears on the website
+        - 'num_reviews': total number of reviews ever published by the reviewer or None if reviewer is an Author
+        - 'num_followers': total number of followers the reviewer has
+        - 'num_books': number of distinct works published by the reviewer, only applies when the reviewer is an Author
+        else it returns None.
+        """
         try:
             # Extract reviewer meta div
-            reviewer_meta_div = soup.find('div', class_='ReviewerProfile__meta')
-            reviewer_name_div = soup.find('div', {'data-testid': 'name', 'class': 'ReviewerProfile__name'})
+            reviewer_meta_div = review_card.find('div', class_='ReviewerProfile__meta')
+            reviewer_name_div = review_card.find('div', {'data-testid': 'name', 'class': 'ReviewerProfile__name'})
             reviewer_name = reviewer_name_div.a.text if reviewer_name_div else None
 
             if reviewer_meta_div:
                 author_span = reviewer_meta_div.find('span', class_='ReviewerProfile__author')
                 profile_author = author_span.get_text(strip=True) if author_span else None
-
+                # if reviewer is an author
                 if profile_author:
                     span_with_books = reviewer_meta_div.find('span', string=re.compile(r'\d+ books'))
                     span_with_followers = reviewer_meta_div.find('span', string=re.compile(r'\d+k followers'))
@@ -30,6 +44,7 @@ class ReviewScraper:
                         'num_followers': num_followers,
                         'num_reviews': None  # No reviews found in this case
                     }
+                # reviewer is not an author
                 else:
                     reviews_span = reviewer_meta_div.find('span', string=lambda text: 'reviews' in text)
                     num_reviews = reviews_span.get_text(strip=True) if reviews_span else "Number of Reviews Not Found"
@@ -48,6 +63,14 @@ class ReviewScraper:
             print(f"Error extracting reviewer information: {e}")
             return None
     def extract_review_info_from_card(self, review_card):
+        """
+        Function takes in html representing a singular review card and extracts review information for the card.
+        :param review_card: html of a singualr review
+        :return: 'star_rating': first_number,
+                'review_text': review_text,
+                'num_likes': num_likes,
+                'num_comments': num_comments
+        """
         try:
             # get star rating information from reviewer's profile
             rating_span = review_card.find('span', {'aria-label': True})
@@ -117,5 +140,5 @@ if __name__ == "__main__":
     file_path = 'example_booklist.txt'
     scraper = ReviewScraper(base_url)
     url_list = scraper.read_book_ids(file_path)
-    scraper.scrape_reviews(url_list, 'example_booklist.json')
+    scraper.scrape_reviews(url_list, 'data/example_review_data.json')
 
