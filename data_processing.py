@@ -82,7 +82,7 @@ if __name__ == "__main__":
 
     # Example usage for review data processing
     review_processor = ReviewDataProcessor(
-        pd.read_json("data/example_review_data.json"),
+        pd.read_json("data/eexample_review_data.json"),
     )
     review_processor.process_data('data/review_data.csv')
 

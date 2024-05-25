@@ -47,7 +47,7 @@ def save_to_textfile(unique_urls, filename):
 
 # Set to store unique URLs
 unique_urls = set()
-output_filename = "booklist_2019.txt"
+output_filename = "data/booklist_2019.txt"
 for url in webpage_list:
     webpage_url = url
     book_urls = extract_book_ids(webpage_url)
