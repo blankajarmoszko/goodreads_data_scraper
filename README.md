@@ -13,7 +13,7 @@
 
 ## About
 
-This project is a Goodreads data scraper designed to scrape book information and up to 30 reviews per given title. It was developed as a helper tool for my machine learning thesis to gather Goodreads book and review data. The project uses BeautifulSoup (bs4) to extract the necessary information.
+This project is a Goodreads data scraper designed to scrape book information and up to 30 reviews per given title. It was developed as a helper tool for my machine learning thesis to gather Goodreads book and review data.  The final thesis project can be found [here](https://github.com/blankajarmoszko/sentiment_classification_book_reviews_thesis). The project uses BeautifulSoup (bs4) to extract the necessary information.
 
 ## Features
 
