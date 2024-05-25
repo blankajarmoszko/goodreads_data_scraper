@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import json
 import re
+import argparse
 
 class ReviewScraper:
     """
@@ -136,9 +137,18 @@ class ReviewScraper:
         return url_list
 
 if __name__ == "__main__":
+    #base_url = 'https://www.goodreads.com/book/show/'
+    # file_path = 'example_booklist.txt'
+    # scraper = ReviewScraper(base_url)
+    # url_list = scraper.read_book_ids(file_path)
+    # scraper.scrape_reviews(url_list, 'data/example_review_data.json')
+    parser = argparse.ArgumentParser(description='Scrape Goodreads book reviews.')
+    parser.add_argument('input_file', type=str, help='Path to the input text file with book IDs')
+    parser.add_argument('output_file', type=str, help='Path to the output JSON file to save book reviews')
+    args = parser.parse_args()
+
     base_url = 'https://www.goodreads.com/book/show/'
-    file_path = 'example_booklist.txt'
-    scraper = ReviewScraper(base_url)
-    url_list = scraper.read_book_ids(file_path)
-    scraper.scrape_reviews(url_list, 'data/example_review_data.json')
+    review_scraper = ReviewScraper(base_url)
+    url_list = review_scraper.read_book_ids(args.input_file)
+    review_scraper.scrape_reviews(url_list, args.output_file)
 

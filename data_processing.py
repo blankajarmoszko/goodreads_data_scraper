@@ -1,4 +1,5 @@
 import pandas as pd
+import argparse
 
 class BookDataProcessor:
     def __init__(self, *book_data_frames):
@@ -75,15 +76,26 @@ class ReviewDataProcessor:
 
 if __name__ == "__main__":
     # Example usage for book data processing
-    book_processor = BookDataProcessor(
-        pd.read_json("data/example_book_data.json")
-    )
-    book_processor.process_data('data/book_data.csv')
+    # book_processor = BookDataProcessor(
+    #     pd.read_json("data/example_book_data.json")
+    # )
+    # book_processor.process_data('data/book_data.csv')
+    #
+    # # Example usage for review data processing
+    # review_processor = ReviewDataProcessor(
+    #     pd.read_json("data/eexample_review_data.json"),
+    # )
+    # review_processor.process_data('data/review_data.csv')
+    parser = argparse.ArgumentParser(description='Process book and review data.')
+    parser.add_argument('book_json_file', type=str, help='Path to the input JSON file containing book data')
+    parser.add_argument('book_id_file', type=str, help='Path to the input text file containing book IDs')
+    args = parser.parse_args()
 
-    # Example usage for review data processing
-    review_processor = ReviewDataProcessor(
-        pd.read_json("data/eexample_review_data.json"),
-    )
-    review_processor.process_data('data/review_data.csv')
+    if args.book_json_file and args.book_id_file:
+        book_processor = BookDataProcessor(pd.read_json(args.book_json_file))
+        book_processor.process_data('book_data.csv')
+
+        review_processor = ReviewDataProcessor(pd.read_json(args.review_json_file))
+        review_processor.process_data('review_data.csv')
 
 

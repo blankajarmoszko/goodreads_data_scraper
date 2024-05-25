@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import json
+import argparse
 
 class BookScraper:
     def __init__(self, base_url='https://www.goodreads.com/book/show/'):
@@ -77,8 +78,15 @@ class BookScraper:
 
 
 if __name__ == "__main__":
-    file_path = 'example_booklist.txt'
-    output_file = 'data/example_book_data.json'
+    # file_path = 'example_booklist.txt'
+    # output_file = 'data/example_book_data.json'
+    # book_scraper = BookScraper()
+    # book_scraper.read_book_ids(file_path)
+    # book_scraper.get_all_books(output_file)
+    parser = argparse.ArgumentParser(description='Scrape Goodreads book data.')
+    parser.add_argument('input_file', type=str, help='Path to the input text file with book IDs')
+    parser.add_argument('output_file', type=str, help='Path to the output JSON file to save book data')
+    args = parser.parse_args()
     book_scraper = BookScraper()
-    book_scraper.read_book_ids(file_path)
-    book_scraper.get_all_books(output_file)
+    book_scraper.read_book_ids(args.input_file)
+    book_scraper.get_all_books(args.output_file)
